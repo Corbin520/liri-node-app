@@ -1,6 +1,5 @@
 
 var axios = require("axios");
-// set what are known as environment variables to the global `process.env` object in node, from .env file
 require("dotenv").config();
 var moment = require('moment');
 var fs = require("fs");
@@ -8,11 +7,11 @@ var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var omdb = require('omdb');
 var BandsInTownEvents = require('bandsintown-events');
-
 var spotify = new Spotify(keys.spotify);
-
 var argument1 = process.argv[2];
 
+
+// Switch arguments
 switch(argument1) {
   case "spotify-this-song":
   spotifyFunction()
@@ -29,7 +28,6 @@ switch(argument1) {
   case "do-what-it-says":
   doWhatItSays();
 }
-
 
 // Spotify
 function spotifyFunction() {
@@ -117,11 +115,20 @@ function doWhatItSays() {
 // Bands in Town
 function bandsInTownFunction() {
   var argument2 = process.argv[3];
+
   axios.get("https://rest.bandsintown.com/artists/" + argument2 + "/events?app_id=codingbootcamp").then(
     
     function(response) {
-      console.log(response.Agent);
-    })
+      // console.log(response.data[1])
+    for (var i = 0; i < response.data.length; i++) {
+      if (i === 4) break
+      console.log("--------------------");
+      console.log("Venue name: " + response.data[i].venue.name);
+      console.log("Venue Location: " + response.data[i].venue.city + " , " + response.data[i].venue.region);
+      console.log("Date: " + response.data[i].datetime);
+      console.log("--------------------")
+    } 
+  })
 };
 
 
